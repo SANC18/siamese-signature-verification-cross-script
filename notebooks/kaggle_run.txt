@@ -1,0 +1,12 @@
+%%bash
+set -e
+cp -r /kaggle/input/datasets/YOUR_USERNAME/siam-code/signature-verification-siamese /kaggle/working/
+cd /kaggle/working/signature-verification-siamese
+pip install -q opencv-python-headless
+export OPENCV_LOG_LEVEL=ERROR
+D=/kaggle/input/datasets/ishanikathuria/handwritten-signature-datasets
+A="--cedar $D/CEDAR/CEDAR --hindi $D/BHSig260-Hindi/BHSig260-Hindi --bengali $D/BHSig260-Bengali/BHSig260-Bengali"
+python -u experiments.py $A --seeds 0 1 2 --out results_all
+python -u experiments.py $A --seeds 0 --variants degrade_aug --out results_all
+python summarize.py --out results_all
+cat results_all/results.csv
